@@ -1,6 +1,7 @@
 package ImageHoster.service;
 
 import ImageHoster.model.Image;
+import ImageHoster.model.Comment;
 import ImageHoster.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,8 @@ public class ImageService {
 
 
     //The method calls the getImageByTitle() method in the Repository and passes the title of the image to be fetched
-    public Image getImageByTitle(String title) {
-        return imageRepository.getImageByTitle(title);
+    public Image getImageById(Integer imageId) {
+        return imageRepository.getImageById(imageId);
     }
 
     //The method calls the getImage() method in the Repository and passes the id of the image to be fetched

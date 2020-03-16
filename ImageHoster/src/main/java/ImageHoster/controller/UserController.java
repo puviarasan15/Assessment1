@@ -1,4 +1,5 @@
 package ImageHoster.controller;
+import java.util.regex.*;
 
 import ImageHoster.model.Image;
 import ImageHoster.model.User;
@@ -40,9 +41,29 @@ public class UserController {
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
     //This method calls the business logic and after the user record is persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user) {
-        userService.registerUser(user);
-        return "redirect:/users/login";
+    public String registerUser(User user, Model model) {
+        Boolean hasLetter = false, hasDigit = false, hasSpecial = false;
+        //Here the password strength is checked so that it should contain atleast one character, one digit, one alphabet
+        for (int i = 0; i < user.getPassword().length(); i++) {
+            char x = user.getPassword().charAt(i);
+            if (Character.isLetter(x))
+                hasLetter = true;
+            else if (Character.isDigit(x))
+                hasDigit = true;
+            else
+                hasSpecial = true;
+        }
+        if(hasLetter && hasDigit && hasSpecial){
+            userService.registerUser(user);
+            return "redirect:/users/login";
+        }
+        //If password is wek then the error message is shown as given below
+        else{
+            String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
+            model.addAttribute("User", user);
+            model.addAttribute("passwordTypeError", error);
+            return "users/registration";
+        }
     }
 
     //This controller method is called when the request pattern is of type 'users/login'
